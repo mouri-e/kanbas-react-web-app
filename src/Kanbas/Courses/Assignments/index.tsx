@@ -25,76 +25,81 @@ export default function Assignments() {
           </div>
           <ul className="wd-lessons list-group rounded-0">
             <li className="wd-lesson list-group-item p-3 ps-1">
+              <a className="wd-assignment-link text-black text-decoration-none"
+                href="#/Kanbas/Courses/1234/Assignments/123">
               
-              <div className="row">
-                <div className="col-1 mt-4">
-                  <BsGripVertical className="me-2 fs-3" />
-                  <RiDraftLine className="me-2 fs-3" />
-                </div>
-                <div className="col-10">
-                  <a className="wd-assignment-link text-black text-decoration-none"
-                    href="#/Kanbas/Courses/1234/Assignments/123">
+                <div className="row">
+                  <div className="col-1 mt-4">
+                    <BsGripVertical className="me-2 fs-3" />
+                    <RiDraftLine className="me-2 fs-3" />
+                  </div>
+                  <div className="col-10">
+                  
                     A1
-                  </a>
-                  <br />
-                  <div className="text-danger d-inline">Multiple Modules</div> | <b>Not available until</b> May 6 at 12:00am |
-                  <div className="">
-                    <b> Due</b> May 13 at 11:59pm | 100 pts
+                  
+                    <br />
+                    <div className="text-danger d-inline">Multiple Modules</div> | <b>Not available until</b> May 6 at 12:00am |
+                    <div className="">
+                      <b> Due</b> May 13 at 11:59pm | 100 pts
+                    </div>
                   </div>
-                </div>
-                <div className="col-1 mt-4">
-                  <LessonControlButtons />
-                </div>
+                  <div className="col-1 mt-4">
+                    <LessonControlButtons />
+                  </div>
                 
                 
-              </div>
+                </div>
               
-              
+              </a>
             </li>
             <li className="wd-lesson list-group-item p-3 ps-1">
-              <div className="row">
-                <div className="col-1 mt-4">
-                  <BsGripVertical className="me-2 fs-3" />
-                  <RiDraftLine className="me-2 fs-3" />
-                </div>
-                <div className="col-10">
-                  <a className="wd-assignment-link text-black text-decoration-none"
-                    href="#/Kanbas/Courses/1234/Assignments/123">
+              <a className="wd-assignment-link text-black text-decoration-none" href="#/Kanbas/Courses/1234/Assignments/123">
+                <div className="row">
+                  <div className="col-1 mt-4">
+                    <BsGripVertical className="me-2 fs-3" />
+                    <RiDraftLine className="me-2 fs-3" />
+                  </div>
+                  <div className="col-10">
+                  
                     A2
-                  </a>
-                  <br />
-                  <div className="text-danger d-inline">Multiple Modules</div> | <b>Not available until</b> May 13 at 12:00am |
-                  <div className="">
-                    <b> Due</b> May 20 at 11:59pm | 100 pts
+                  
+                    <br />
+                    <div className="text-danger d-inline">Multiple Modules</div> | <b>Not available until</b> May 13 at 12:00am |
+                    <div>
+                      <b> Due</b> May 20 at 11:59pm | 100 pts
+                    </div>
+                  
+                  </div>
+                  <div className="col-1 mt-4">
+                    <LessonControlButtons />
                   </div>
                 </div>
-                <div className="col-1 mt-4">
-                  <LessonControlButtons />
-                </div>
-              </div>
+              </a>
             </li>
             <li className="wd-lesson list-group-item p-3 ps-1">
-
-              <div className="row">
-                <div className="col-1 mt-4">
-                  <BsGripVertical className="me-2 fs-3" />
-                  <RiDraftLine className="me-2 fs-3" />
-                </div>
-                <div className="col-10">
-                  <a className="wd-assignment-link text-black text-decoration-none"
-                    href="#/Kanbas/Courses/1234/Assignments/123">
-                    A3
-                  </a>
-                  <br />
-                  <div className="text-danger d-inline">Multiple Modules</div> | <b>Not available until</b> May 20 at 12:00am |
-                  <div className="">
-                    <b> Due</b> May 27 at 11:59pm | 100 pts
+              <a className="wd-assignment-link text-black text-decoration-none" href="#/Kanbas/Courses/1234/Assignments/123">
+                <div className="row">
+                
+                  <div className="col-1 mt-4">
+                    <BsGripVertical className="me-2 fs-3" />
+                    <RiDraftLine className="me-2 fs-3" />
                   </div>
+                  <div className="col-10">
+                  
+                    A3
+                    <div></div>
+                    <div className="text-danger d-inline mt-3">Multiple Modules</div> | <b>Not available until</b> May 20 at 12:00am |
+                    <div className="">
+                      <b> Due</b> May 27 at 11:59pm | 100 pts
+                    </div>
+                  
+                  </div>
+                  <div className="col-1 mt-4">
+                    <LessonControlButtons />
+                  </div>
+                
                 </div>
-                <div className="col-1 mt-4">
-                  <LessonControlButtons />
-                </div>
-              </div>
+              </a>
             </li>
           </ul>
         </li>
