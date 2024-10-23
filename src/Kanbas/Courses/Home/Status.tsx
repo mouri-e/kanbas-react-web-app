@@ -5,9 +5,6 @@ import { LiaFileImportSolid } from "react-icons/lia";
 import { AiFillHome } from "react-icons/ai";
 import { BiSolidBarChartAlt2, BiSolidBell } from 'react-icons/bi'
 
-
-{/* Find more icons */ }
-
 export default function CourseStatus() {
   return (
     <div id="wd-course-status" style={{ width: "300px" }}>

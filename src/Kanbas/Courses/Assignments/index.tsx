@@ -1,12 +1,15 @@
 import { BsGripVertical, BsPlusLg } from "react-icons/bs";
-import ModuleControlButtons from "../Modules/ModuleControlButtons";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import { RiArrowDropDownFill } from 'react-icons/ri'
 import LessonControlButtons from "../Modules/LessonControlButtons";
 import { RiDraftLine } from 'react-icons/ri'
 import { IoEllipsisVertical } from "react-icons/io5";
+import { useParams } from "react-router";
+import * as db from "../../Database";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments;
   return (
     <div id="wd-assignments">
       <AssignmentControlButtons /><br />
@@ -24,86 +27,37 @@ export default function Assignments() {
             </div>
           </div>
           <ul className="wd-lessons list-group rounded-0">
-            <li className="wd-lesson list-group-item p-3 ps-1">
-              <a className="wd-assignment-link text-black text-decoration-none"
-                href="#/Kanbas/Courses/1234/Assignments/123">
+            {assignments
+              .filter((assignment: any) => assignment.course === cid)
+              .map((assignment: any) => (
+                <li className="wd-lesson list-group-item p-3 ps-1">
+                  <a className="wd-assignment-link text-black text-decoration-none"
+                    href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}>
               
-                <div className="row">
-                  <div className="col-1 mt-4">
-                    <BsGripVertical className="me-2 fs-3" />
-                    <RiDraftLine className="me-2 fs-3" />
-                  </div>
-                  <div className="col-10">
-                  
-                    A1
-                  
-                    <br />
-                    <div className="text-danger d-inline">Multiple Modules</div> | <b>Not available until</b> May 6 at 12:00am |
-                    <div className="">
-                      <b> Due</b> May 13 at 11:59pm | 100 pts
+                    <div className="row">
+                      <div className="col-1 mt-4">
+                        <BsGripVertical className="me-2 fs-3" />
+                        <RiDraftLine className="me-2 fs-3" />
+                      </div>
+                      <div className="col-10">
+                        <h4 className="fw-bold">{assignment.title}</h4> 
+                        
+                        <div className="text-danger d-inline">Multiple Modules</div> |
+                        <b> Not available until</b> {assignment.available} |
+                        <div className="">
+                          <b> Due</b> {assignment.due} | {assignment.points} pts
+                        </div>
+                      </div>
+                      <div className="col-1 mt-4">
+                        <LessonControlButtons />
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-1 mt-4">
-                    <LessonControlButtons />
-                  </div>
-                
-                
-                </div>
-              
-              </a>
-            </li>
-            <li className="wd-lesson list-group-item p-3 ps-1">
-              <a className="wd-assignment-link text-black text-decoration-none" href="#/Kanbas/Courses/1234/Assignments/123">
-                <div className="row">
-                  <div className="col-1 mt-4">
-                    <BsGripVertical className="me-2 fs-3" />
-                    <RiDraftLine className="me-2 fs-3" />
-                  </div>
-                  <div className="col-10">
-                  
-                    A2
-                  
-                    <br />
-                    <div className="text-danger d-inline">Multiple Modules</div> | <b>Not available until</b> May 13 at 12:00am |
-                    <div>
-                      <b> Due</b> May 20 at 11:59pm | 100 pts
-                    </div>
-                  
-                  </div>
-                  <div className="col-1 mt-4">
-                    <LessonControlButtons />
-                  </div>
-                </div>
-              </a>
-            </li>
-            <li className="wd-lesson list-group-item p-3 ps-1">
-              <a className="wd-assignment-link text-black text-decoration-none" href="#/Kanbas/Courses/1234/Assignments/123">
-                <div className="row">
-                
-                  <div className="col-1 mt-4">
-                    <BsGripVertical className="me-2 fs-3" />
-                    <RiDraftLine className="me-2 fs-3" />
-                  </div>
-                  <div className="col-10">
-                  
-                    A3
-                    <div></div>
-                    <div className="text-danger d-inline mt-3">Multiple Modules</div> | <b>Not available until</b> May 20 at 12:00am |
-                    <div className="">
-                      <b> Due</b> May 27 at 11:59pm | 100 pts
-                    </div>
-                  
-                  </div>
-                  <div className="col-1 mt-4">
-                    <LessonControlButtons />
-                  </div>
-                
-                </div>
-              </a>
-            </li>
+                  </a>
+                </li>
+              ))}
           </ul>
         </li>
       </ul>
-    </div>
+    </ div>
   );
 }
