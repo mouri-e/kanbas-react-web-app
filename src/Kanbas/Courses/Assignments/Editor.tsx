@@ -3,7 +3,39 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import * as db from "../../Database";
 import { Link } from "react-router-dom";
 
-export default function AssignmentEditor() {
+export default function AssignmentEditor(
+    /*
+    {
+        assignmentTitle,
+        assignmentDescription,
+        assignmentPoints,
+        assignmentDue,
+        assignmentAvailable,
+        assignmentClosedOn,
+        setAssignmentTitle,
+        setAssignmentDescription,
+        setAssignmentPoints,
+        setAssignmentDue,
+        setAssignmentAvailable,
+        setAssignmentClosedOn,
+        addAssignment
+    }:
+        {
+            assignmentTitle: string;
+            assignmentDescription: string;
+            assignmentPoints: string;
+            assignmentDue: string;
+            assignmentAvailable: string;
+            assignmentClosedOn: string;
+            setAssignmentTitle: (title: string) => void;
+            setAssignmentDescription: (description: string) => void;
+            setAssignmentPoints: (points: number) => void;
+            setAssignmentDue: (dueDate: string) => void;
+            setAssignmentAvailable: (availableDate: string) => void;
+            setAssignmentClosedOn: (closedOnDate: string) => void;
+            addAssignment: () => void;
+        }
+            */) {
     const { cid } = useParams();
     const { pathname } = useLocation();
     const assignmentID = pathname.split("/")[5];
@@ -22,11 +54,19 @@ export default function AssignmentEditor() {
                                 Assignment Name
                             </label>
                             <input type="text" className="form-control"
-                                id="wd-name" value={assignment.title} />
+                                id="wd-name"
+                                //defaultValue={assignmentTitle}
+                                //placeholder="Assignment Name"
+                            //onChange={(e) => setAssignmentTitle(e.target.value)}
+                            />
                         </div>
                         <div className="mb-3">
-                            <textarea className="form-control" id="wd-description" rows={11}>
-                                {assignment.description}
+                            <textarea className="form-control" id="wd-description" rows={11}
+                                //defaultValue={assignmentDescription}
+                                //placeholder="Assignment Description"
+                                //onChange={(e) => setAssignmentDescription(e.target.value)}
+                            >
+                                
                             </textarea>
                         </div>
 
@@ -35,7 +75,11 @@ export default function AssignmentEditor() {
                                 <label htmlFor="wd-points" className="form-label float-end">Points</label>
                             </div>
                             <div className="col mb-3">
-                                <input id="wd-points" className="form-control" value={assignment.points} />
+                                <input id="wd-points" className="form-control"
+                                //defaultValue={assignmentPoints}
+                                //placeholder="100"
+                                //onChange={(e) => setAssignmentPoints(Number(e.target.value))}
+                                />
                             </div>
                         </div>
 
@@ -125,7 +169,11 @@ export default function AssignmentEditor() {
                                 <input id="wd-points" className="form-control mb-3" value={"Everyone"} />
 
                                 <label htmlFor="wd-due-date" className="fw-bold mb-1">Due</label>
-                                <input id="wd-due-date" type="text" className="form-control mb-4" value={assignment.due} />
+                                <input id="wd-due-date" type="text" className="form-control mb-4"
+                                    //defaultValue={assignmentDue}
+                                    //placeholder="Assignment Due Date"
+                                    //onChange={(e) => setAssignmentDue(e.target.value)}
+                                    />
                 
                                 <div className="row">
                                     <div className="col mb-1">
@@ -139,11 +187,19 @@ export default function AssignmentEditor() {
                                 </div>
                                 <div className="row">
                                     <div className="col mb-3">
-                                        <input className="form-control mb-3" id="wd-available-from" type="text" value={assignment.available} />
+                                        <input className="form-control mb-3" id="wd-available-from" type="text"
+                                            //defaultValue={assignmentAvailable}
+                                            //placeholder="Assignment Available On"
+                                            //onChange={(e) => setAssignmentAvailable(e.target.value)}
+                                            />
                                         
                                     </div>
                                     <div className="col mb-3">
-                                        <input className="form-control mb-3" id="wd-available-until" type="text" value={assignment.closedOn} />
+                                        <input className="form-control mb-3" id="wd-available-until" type="text"
+                                            //defaultValue={assignmentClosedOn}
+                                            //placeholder="Assignment Closed On"
+                                        //onChange={(e) => setAssignmentClosedOn(e.target.value)}
+                                        />
                                         
                                     </div>
                                 </div>
@@ -154,9 +210,11 @@ export default function AssignmentEditor() {
                         <div className="row">
                 
                             <div className="col mb-3 float-end">
-                                <Link to={assignmentsLink}>
-                                    <button type="button" className="btn btn-danger float-end">Save</button>
-                                </Link>
+                                
+                                    <button
+                                        //onClick={addAssignment}
+                                        type="button" className="btn btn-danger float-end">Save</button>
+                                
                                 <Link to={assignmentsLink}>
                                     <button type="button" className="btn btn-secondary float-end">Cancel</button>
                                 </Link>
