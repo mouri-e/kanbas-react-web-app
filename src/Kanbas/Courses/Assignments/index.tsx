@@ -5,14 +5,15 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 import { RiDraftLine } from 'react-icons/ri'
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useParams } from "react-router";
-import * as db from "../../Database";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { FaTrash } from "react-icons/fa";
+import AssignmentDeleter from "./AssignmentDeleter";
+import { Link } from "react-router-dom";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const [assignments, setAssignments] = useState<any[]>(db.assignments);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { assignments } = useSelector((state: any) => state.assignmentReducer);
   
   return (
     <div id="wd-assignments">
@@ -39,6 +40,7 @@ export default function Assignments() {
             {assignments
               .filter((assignment: any) => assignment.course === cid)
               .map((assignment: any) => (
+                
                 <li className="wd-lesson list-group-item p-3 ps-1">
                   
                   
@@ -46,34 +48,49 @@ export default function Assignments() {
                     href={`#/Kanbas/Courses/${cid}/Assignments${currentUser.role === "FACULTY" ?
                       ("/" + assignment._id) : ""}`}>
                   
-                      <div className="row">
-                        <div className="col-1 mt-4">
-                          <BsGripVertical className="me-2 fs-3" />
-                          <RiDraftLine className="me-2 fs-3" />
-                        </div>
-                        <div className="col-10">
-                          <h4 className="fw-bold">{assignment.title}</h4>
+                    <div className="row">
+                      <div className="col-1 mt-4">
+                        <BsGripVertical className="me-2 fs-3" />
+                        <RiDraftLine className="me-2 fs-3" />
+                      </div>
+                      <div className="col-9">
+                        <h4 className="fw-bold">{assignment.title}</h4>
                         
-                          <div className="text-danger d-inline">Multiple Modules</div> |
-                          <b> Not available until</b> {assignment.available} |
-                          <div className="">
-                            <b> Due</b> {assignment.due} | {assignment.points} pts
-                          </div>
-                        </div>
-                        <div className="col-1 mt-4">
-                          {currentUser.role == "FACULTY" &&
-                            <LessonControlButtons />
-                          }
+                        <div className="text-danger d-inline">Multiple Modules</div> |
+                        <b> Not available until</b> {assignment.available} |
+                        <div className="">
+                          <b> Due</b> {assignment.due} | {assignment.points} pts
                         </div>
                       </div>
+                      <div className="col-2 mt-4">
+                        {currentUser.role == "FACULTY" &&
+                          <div className="float-end">
+                            <LessonControlButtons />
+                            <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
+                              <FaTrash className="text-danger mb-6 me-3"
+                                id="wd-delete-assignment-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target={"#wd-delete-assignment-dialog" + assignment._id}
+                              />
+                            </Link>
+                            <AssignmentDeleter
+                              assignmentIDBeingDeleted={assignment._id}
+                              cid={cid}
+                            />
+                          </div>
+                            
+                        }
+                      </div>
+                    </div>
                       
-                        </a>
+                  </a>
                       
                 </li>
               ))}
           </ul>
         </li>
       </ul>
+      
     </ div>
   );
 }

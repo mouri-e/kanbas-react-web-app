@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
-import * as db from "../Database";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addEnrollment, deleteEnrollment } from "./reducer";
+import { useNavigate } from "react-router";
+import ProtectedRoute from "./ProtectedRoute";
 
 
 export default function Dashboard(
@@ -14,7 +16,56 @@ export default function Dashboard(
         updateCourse: () => void;
     }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    const { enrollments } = db;
+    
+    const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+    
+
+    const [filteredCourses, setFilteredCourses] = useState(
+        courses.filter((course) =>
+            enrollments.some(
+                (enrollment: { user: any; course: any; }) =>
+                    enrollment.user === currentUser._id &&
+                    enrollment.course === course._id
+            )));
+    
+    const [allCoursesBool, setAllCoursesBool] = useState(false);
+
+    const handleCoursesFiltering = () => {
+        const oppCoursesBool = !allCoursesBool;
+        setAllCoursesBool(oppCoursesBool);
+        if (oppCoursesBool) {
+            setFilteredCourses(courses);
+        }
+        else {
+            setFilteredCourses(
+                courses.filter((course) =>
+                    enrollments.some(
+                        (enrollment: { user: any; course: any; }) =>
+                            enrollment.user === currentUser._id &&
+                            enrollment.course === course._id
+                    )))
+        }
+    }
+
+    const dispatch = useDispatch();
+    const handleEnrollment = (courseID: string) => {
+        dispatch(addEnrollment({
+            _id: new Date().getTime().toString(),
+            user: currentUser._id,
+            course: courseID
+        
+        }));
+    }
+
+    const handleUnenrollment = (courseID: string) => {
+        const enrollmentObject = 
+        {
+        user: currentUser._id,
+        course: courseID
+        }
+        dispatch(deleteEnrollment(enrollmentObject));
+    }
+    
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1>
@@ -42,21 +93,28 @@ export default function Dashboard(
                     <hr />
                 </>
             }
+
+            {currentUser.role == "STUDENT" &&
+                <button
+                    onClick={handleCoursesFiltering}
+                    className="btn btn-primary float-end">
+                    Enrollments
+                </button>
+
+            }
             <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
             <hr />
             <div id="wd-dashboard-courses" className="row">
                 <div className="row row-cols-1 row-cols-md-5 g-4">
-                    {courses.filter((course) =>
-                        enrollments.some(
-                            (enrollment) =>
-                                enrollment.user === currentUser._id &&
-                                enrollment.course === course._id
-                        ))
-                        .map((course) => (
+                    
+                    {filteredCourses
+                        .map((course) =>
+                            
                             <div key={course._id} className="wd-dashboard-course col" style={{ width: "270px" }}>
                                 <div className="card rounded-3 overflow-hidden">
-                                    <Link className="wd-dashboard-course-link text-decoration-none text-dark"
-                                        to={`/Kanbas/Courses/${course._id}/Home`}>
+                                    <ProtectedRoute courseID={course._id}>
+                                    
+                                            
                                         <img src={`/images/${course.image}`} width="100%" height={160} alt="React Logo" />
                                         <div className="card-body">
                                             <h5 className="wd-dashboard-course-title card-title"> {course.name} </h5>
@@ -67,7 +125,40 @@ export default function Dashboard(
                                             <button className="btn btn-primary">
                                                 Go
                                             </button>
-                                            {currentUser.role == "FACULTY" &&
+                                            {/** There is an enrollment in the course matching the student */}
+                                            {currentUser.role === "STUDENT" &&
+                                                enrollments.some(
+                                                    (enrollment: { user: any; course: any; }) => (enrollment.user === currentUser._id && enrollment.course === course._id)
+                                                )
+                                                &&
+                                                (
+                                                <Link to={`/Kanbas/Dashboard/`}>
+                                                <button
+                                                    onClick={() => handleUnenrollment(course._id)}
+                                                    className="btn btn-danger float-end">
+                                                        Unenroll
+                                                    </button>
+                                                </Link>
+                                                )}
+                                            {/** There is no enrollment matching the student */}
+                                            {currentUser.role === "STUDENT"
+                                                && 
+                                                (!
+                                                enrollments.some(
+                                                    (enrollment: { user: any; course: any; }) => (enrollment.user === currentUser._id && enrollment.course === course._id)
+                                                ))
+                                                &&
+                                                (
+                                                <Link to={`/Kanbas/Dashboard/`}>
+                                                <button
+                                                    onClick={() => handleEnrollment(course._id)}
+                                                    className="btn btn-success float-end">
+                                                        Enroll
+                                                    </button>
+                                                    </Link>
+                                                )}
+
+                                            {currentUser.role === "FACULTY" &&
                                                 <>
                                                     <button onClick={(event) => {
                                                         event.preventDefault();
@@ -88,10 +179,11 @@ export default function Dashboard(
                                                 </>
                                             }
                                         </div>
-                                    </Link>
+                                    </ProtectedRoute>
                                 </div>
-                            </div>
-                        ))}
+                                </div>
+                                
+                        )}
                     
                     
                 </div>
