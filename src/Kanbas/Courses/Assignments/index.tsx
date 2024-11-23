@@ -5,19 +5,32 @@ import LessonControlButtons from "../Modules/LessonControlButtons";
 import { RiDraftLine } from 'react-icons/ri'
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa";
 import AssignmentDeleter from "./AssignmentDeleter";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import * as coursesClient from "../client";
+import { setAssignments } from "./reducer";
+
 
 export default function Assignments() {
   const { cid } = useParams();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { assignments } = useSelector((state: any) => state.assignmentReducer);
-  
+  const dispatch = useDispatch();
+  const fetchAssignments = async () => {
+    const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+    dispatch(setAssignments(assignments));
+  };
+
+  useEffect(() => {
+    fetchAssignments();
+  });
+
   return (
     <div id="wd-assignments">
-      {currentUser.role == "FACULTY" &&
+      {currentUser.role === "FACULTY" &&
         <AssignmentControlButtons />
       }
       <ul id="wd-modules" className="list-group rounded-0">
@@ -28,7 +41,7 @@ export default function Assignments() {
             <div className="d-inline">ASSIGNMENTS</div>
             <div className="d-inline float-end">
               <div className="border p-2 rounded d-inline"> 40% of Total </div>
-              {currentUser.role == "FACULTY" &&
+              {currentUser.role === "FACULTY" &&
                 <>
                   <BsPlusLg className="position-relative me-2 " style={{ bottom: "1px" }} />
                   <IoEllipsisVertical className="fs-4" />
@@ -38,7 +51,7 @@ export default function Assignments() {
           </div>
           <ul className="wd-lessons list-group rounded-0">
             {assignments
-              .filter((assignment: any) => assignment.course === cid)
+              //.filter((assignment: any) => assignment.course === cid)
               .map((assignment: any) => (
                 
                 <li className="wd-lesson list-group-item p-3 ps-1">
@@ -63,7 +76,7 @@ export default function Assignments() {
                         </div>
                       </div>
                       <div className="col-2 mt-4">
-                        {currentUser.role == "FACULTY" &&
+                        {currentUser.role === "FACULTY" &&
                           <div className="float-end">
                             <LessonControlButtons />
                             <Link to={`/Kanbas/Courses/${cid}/Assignments`}>

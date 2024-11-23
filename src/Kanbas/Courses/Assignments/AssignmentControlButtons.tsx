@@ -3,7 +3,8 @@ import { RxMagnifyingGlass } from 'react-icons/rx';
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
-export default function AssignmentControlButtons() {
+export default function AssignmentControlButtons(){
+    
     const { cid } = useParams();
     
     return (

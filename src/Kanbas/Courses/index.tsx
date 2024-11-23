@@ -6,7 +6,6 @@ import AssignmentEditor from "./Assignments/Editor";
 import { Navigate, Route, Routes, useParams } from "react-router";
 import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
-import { courses } from "../Database";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
@@ -38,4 +37,5 @@ export default function Courses({ courses }: { courses: any[]; }) {
     </div>
   );
 }
+
   

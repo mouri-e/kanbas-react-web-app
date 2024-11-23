@@ -1,26 +1,39 @@
-import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addEnrollment, deleteEnrollment } from "./reducer";
-import { useNavigate } from "react-router";
+import { addEnrollment, deleteEnrollment, setEnrollments} from "./reducer";
 import ProtectedRoute from "./ProtectedRoute";
+import * as enrollmentsClient from "./client";
+import * as coursesClient from "../Courses/client";
 
 
 export default function Dashboard(
-    { courses, course, setCourse, addNewCourse, deleteCourse, updateCourse }: {
+    { courses, course, previewing, setPreviewMode, setCourse, addNewCourse, deleteCourse, updateCourse }: {
         courses: any[];
         course: any;
+        previewing: Boolean;
+        setPreviewMode: (val: Boolean) => void;
         setCourse: (course: any) => void;
         addNewCourse: () => void;
         deleteCourse: (course: any) => void;
         updateCourse: () => void;
     }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    
-    const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+    //const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+    const [enrollments, setEnrollments] = useState<any[]>([]);
+    const fetchEnrollments = async () => {
+        try {
+            const currentEnrollments = await enrollmentsClient.findAllEnrollments();
+            setEnrollments(currentEnrollments);
+        } catch (error) {
+            console.error(error);
+        }
+    };
     
 
-    const [filteredCourses, setFilteredCourses] = useState(
+    
+
+    /*const [filteredCourses, setFilteredCourses] = useState(
         courses.filter((course) =>
             enrollments.some(
                 (enrollment: { user: any; course: any; }) =>
@@ -46,6 +59,7 @@ export default function Dashboard(
                     )))
         }
     }
+    */
 
     const dispatch = useDispatch();
     const handleEnrollment = (courseID: string) => {
@@ -56,7 +70,7 @@ export default function Dashboard(
         
         }));
     }
-
+    
     const handleUnenrollment = (courseID: string) => {
         const enrollmentObject = 
         {
@@ -66,11 +80,26 @@ export default function Dashboard(
         dispatch(deleteEnrollment(enrollmentObject));
     }
     
+    const enrollUserInCourse = async (cid : string) => {
+        await enrollmentsClient.enrollInCourse(cid, currentUser._id);
+        handleEnrollment(cid);
+    };
+
+    const unenrollUserFromCourse = async (cid : string) => {
+        await enrollmentsClient.unenrollFromCourse(cid, currentUser._id);
+        handleUnenrollment(cid);
+    };
+
+    useEffect(() => {
+        fetchEnrollments();
+    }, [enrollUserInCourse, unenrollUserFromCourse]);
+
+    
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1>
             <hr />
-            {currentUser.role == "FACULTY" &&
+            {currentUser.role === "FACULTY" &&
                 <>
                     <h5>New Course
                         <button className="btn btn-primary float-end"
@@ -94,9 +123,9 @@ export default function Dashboard(
                 </>
             }
 
-            {currentUser.role == "STUDENT" &&
+            {currentUser.role === "STUDENT" &&
                 <button
-                    onClick={handleCoursesFiltering}
+                    onClick={() => { setPreviewMode(!previewing) }}
                     className="btn btn-primary float-end">
                     Enrollments
                 </button>
@@ -107,7 +136,8 @@ export default function Dashboard(
             <div id="wd-dashboard-courses" className="row">
                 <div className="row row-cols-1 row-cols-md-5 g-4">
                     
-                    {filteredCourses
+                    {//filteredCourses
+                        courses
                         .map((course) =>
                             
                             <div key={course._id} className="wd-dashboard-course col" style={{ width: "270px" }}>
@@ -134,7 +164,7 @@ export default function Dashboard(
                                                 (
                                                 <Link to={`/Kanbas/Dashboard/`}>
                                                 <button
-                                                    onClick={() => handleUnenrollment(course._id)}
+                                                    onClick={() => unenrollUserFromCourse(course._id)}
                                                     className="btn btn-danger float-end">
                                                         Unenroll
                                                     </button>
@@ -147,11 +177,12 @@ export default function Dashboard(
                                                 enrollments.some(
                                                     (enrollment: { user: any; course: any; }) => (enrollment.user === currentUser._id && enrollment.course === course._id)
                                                 ))
-                                                &&
+                                                && 
                                                 (
                                                 <Link to={`/Kanbas/Dashboard/`}>
                                                 <button
-                                                    onClick={() => handleEnrollment(course._id)}
+                                                        onClick={() => enrollUserInCourse(course._id)}
+                                                            //() => handleEnrollment(course._id)}
                                                     className="btn btn-success float-end">
                                                         Enroll
                                                     </button>

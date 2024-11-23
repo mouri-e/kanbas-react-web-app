@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { deleteAssignment } from "./reducer";
 import { useDispatch } from "react-redux";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentDeleter(
     {
@@ -12,7 +13,13 @@ export default function AssignmentDeleter(
             cid: any;
         }
 ) {
+
     const dispatch = useDispatch();
+    const removeAssignment = async (assignmentId: string) => {
+        await assignmentsClient.deleteAssignment(assignmentId);
+        dispatch(deleteAssignment(assignmentId));
+    };
+    
     return (
         <div id={"wd-delete-assignment-dialog" + assignmentIDBeingDeleted}
             className="modal fade"
@@ -34,7 +41,8 @@ export default function AssignmentDeleter(
                             </button>
                         </Link>
                         <Link to={`/Kanbas/Courses/${cid}/Assignments`}>
-                            <button onClick={() => dispatch(deleteAssignment(assignmentIDBeingDeleted))}    type="button" data-bs-dismiss="modal" className="btn btn-danger">
+                            <button onClick={async () => { removeAssignment(assignmentIDBeingDeleted) }}
+                                type="button" data-bs-dismiss="modal" className="btn btn-danger">
                                 Yes
                             </button>
                         </Link>

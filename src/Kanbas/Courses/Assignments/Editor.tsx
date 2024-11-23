@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
 
 export default function AssignmentEditor() {
     const { cid } = useParams();
@@ -27,9 +29,13 @@ export default function AssignmentEditor() {
     const [assignmentClosedOn, setAssignmentClosedOn] = useState(assignment?.closedOn);
     
 
-    const handleAssignmentChanges = () => {
+    const handleAssignmentChanges = async () => {
+        console.log("updating new assignment check");
+        if (!cid) return;
+        console.log("got past the cid check");
+
         if (assignmentID === "new") {
-            dispatch(addAssignment({
+            const newAssignment = {
                 ...assignment,
                 _id: new Date().getTime().toString(),
                 course: cid,
@@ -40,10 +46,13 @@ export default function AssignmentEditor() {
                 available: assignmentAvailable,
                 closedOn: assignmentClosedOn
 
-            }));
+            };
+            const serverAssignmentObject = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+            dispatch(addAssignment(serverAssignmentObject));
         }
         else {
-            dispatch(updateAssignment({
+            
+            const newAssignment = {
                 ...assignment,
                 course: cid,
                 title: assignmentTitle,
@@ -52,11 +61,16 @@ export default function AssignmentEditor() {
                 due: assignmentDue,
                 available: assignmentAvailable,
                 closedOn: assignmentClosedOn
-            }));
+
+            };
+            //UPDATE THIS TO USE THE UPDATE FUNCTION IN coursesClient
+            await assignmentsClient.updateAssignment(newAssignment);
+            dispatch(updateAssignment(newAssignment));
         }
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     }
-    
+
+
     return (
         <div>
             <div id="wd-assignments-editor">
