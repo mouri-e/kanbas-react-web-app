@@ -19,20 +19,25 @@ export default function Dashboard(
         updateCourse: () => void;
     }) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    //const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
-    const [enrollments, setEnrollments] = useState<any[]>([]);
+    const dispatch = useDispatch();
+    const { enrollments } = useSelector((state: any) => state.enrollmentsReducer);
+    const [enrollmentChanges, setEnrollmentChanges] = useState(false);
+    //const [enrollments, setEnrollmentsFunc] = useState<any[]>([]);
     const fetchEnrollments = async () => {
         try {
             const currentEnrollments = await enrollmentsClient.findAllEnrollments();
-            setEnrollments(currentEnrollments);
+            dispatch(setEnrollments(currentEnrollments));
+            
         } catch (error) {
             console.error(error);
         }
     };
-    
 
+    /*const fetchModules = async () => {
+        const modules = await coursesClient.findModulesForCourse(cid as string);
+        dispatch(setModules(modules));
+    };*/
     
-
     /*const [filteredCourses, setFilteredCourses] = useState(
         courses.filter((course) =>
             enrollments.some(
@@ -61,7 +66,7 @@ export default function Dashboard(
     }
     */
 
-    const dispatch = useDispatch();
+    
     const handleEnrollment = (courseID: string) => {
         dispatch(addEnrollment({
             _id: new Date().getTime().toString(),
@@ -83,18 +88,22 @@ export default function Dashboard(
     const enrollUserInCourse = async (cid : string) => {
         await enrollmentsClient.enrollInCourse(cid, currentUser._id);
         handleEnrollment(cid);
+        const updated = !enrollmentChanges;
+        setEnrollmentChanges(updated);
     };
 
     const unenrollUserFromCourse = async (cid : string) => {
         await enrollmentsClient.unenrollFromCourse(cid, currentUser._id);
         handleUnenrollment(cid);
+        const updated = !enrollmentChanges;
+        setEnrollmentChanges(updated);
     };
 
     useEffect(() => {
         fetchEnrollments();
-    }, [enrollUserInCourse, unenrollUserFromCourse]);
+        
+    }, [enrollmentChanges]);
 
-    
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1>
@@ -125,7 +134,10 @@ export default function Dashboard(
 
             {currentUser.role === "STUDENT" &&
                 <button
-                    onClick={() => { setPreviewMode(!previewing) }}
+                    onClick={() => {
+                        const oppPreviewing = !previewing;
+                        setPreviewMode(oppPreviewing)
+                    }}
                     className="btn btn-primary float-end">
                     Enrollments
                 </button>
