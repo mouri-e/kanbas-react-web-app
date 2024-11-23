@@ -37,13 +37,13 @@ export default function Account() {
             <h4>Ethan Mouri</h4>
             <h4>Section 1</h4>
             <h4>
-                <a href="https://a4--kanbas-react-web-app-fall-24-mouri.netlify.app/#/Kanbas/Account/Signin">
+                <a href="https://a5--kanbas-react-web-app-fall-24-mouri.netlify.app/#/Kanbas/Account/Signin">
                     Kanbas Link
                 </a>
             </h4>
             <h4>
-                <a href="https://github.com/mouri-e/kanbas-react-web-app/tree/a4">
-                    GitHub Repository: Assignment 4
+                <a href="https://github.com/mouri-e/kanbas-react-web-app/tree/a5">
+                    GitHub Repository: Assignment 5
                 </a>
             </h4>
         </div>
