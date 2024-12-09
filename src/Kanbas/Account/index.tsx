@@ -40,18 +40,24 @@ export default function Account() {
             <h4>Ethan Mouri</h4>
             <h4>Section 1</h4>
             <h4>
-                <a href="https://a6--kanbas-react-web-app-fall-24-mouri.netlify.app/#/Kanbas/Account/Signin">
-                    Kanbas Link
+                <a href="https://project--kanbas-react-web-app-fall-24-mouri.netlify.app/#/Kanbas/Account/Signin">
+                    Project Link: Kanbas With Quizzes
                 </a>
             </h4>
             <h4>
-                <a href="https://github.com/mouri-e/kanbas-react-web-app/tree/a6">
-                    GitHub Repository (Netlify): Assignment 6
+                Team Name: Motivation Through Procrastination
+            </h4>
+            <h4>
+                Team Members: Ethan Mouri
+            </h4>
+            <h4>
+                <a href="https://github.com/mouri-e/kanbas-react-web-app/tree/project">
+                    GitHub Repository (Netlify): Quizzes Project
                 </a>
             </h4>
             <h4>
-                <a href="https://github.com/mouri-e/kanbas-node-server-app/tree/a6">
-                    GitHub Repository (Render): Assignment 6
+                <a href="https://github.com/mouri-e/kanbas-node-server-app/tree/project">
+                    GitHub Repository (Render): Quizzes Project
                 </a>
             </h4>
             
