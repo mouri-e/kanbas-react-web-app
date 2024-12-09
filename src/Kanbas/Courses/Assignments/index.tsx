@@ -30,7 +30,7 @@ export default function Assignments() {
 
   return (
     <div id="wd-assignments">
-      {currentUser.role === "FACULTY" &&
+      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
         <AssignmentControlButtons />
       }
       <ul id="wd-modules" className="list-group rounded-0">
@@ -41,7 +41,7 @@ export default function Assignments() {
             <div className="d-inline">ASSIGNMENTS</div>
             <div className="d-inline float-end">
               <div className="border p-2 rounded d-inline"> 40% of Total </div>
-              {currentUser.role === "FACULTY" &&
+              {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
                 <>
                   <BsPlusLg className="position-relative me-2 " style={{ bottom: "1px" }} />
                   <IoEllipsisVertical className="fs-4" />
@@ -58,7 +58,7 @@ export default function Assignments() {
                   
                   
                   <a className="wd-assignment-link text-black text-decoration-none"
-                    href={`#/Kanbas/Courses/${cid}/Assignments${currentUser.role === "FACULTY" ?
+                    href={`#/Kanbas/Courses/${cid}/Assignments${(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") ?
                       ("/" + assignment._id) : ""}`}>
                   
                     <div className="row">
@@ -76,7 +76,7 @@ export default function Assignments() {
                         </div>
                       </div>
                       <div className="col-2 mt-4">
-                        {currentUser.role === "FACULTY" &&
+                        {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
                           <div className="float-end">
                             <LessonControlButtons />
                             <Link to={`/Kanbas/Courses/${cid}/Assignments`}>

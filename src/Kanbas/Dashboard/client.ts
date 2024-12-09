@@ -1,9 +1,10 @@
 import axios from "axios";
+const axiosWithCredentials = axios.create({ withCredentials: true });
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const ENROLLMENTS_API = `${REMOTE_SERVER}/api/enrollments`;
 
 export const findAllEnrollments = async () => {
-    const { data } = await axios.get(`${ENROLLMENTS_API}`);
+    const { data } = await axiosWithCredentials.get(`${ENROLLMENTS_API}`);
     return data;
 };
 

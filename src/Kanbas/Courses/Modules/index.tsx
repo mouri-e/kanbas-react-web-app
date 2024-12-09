@@ -46,7 +46,7 @@ export default function Modules() {
 
   return (
     <div className="wd-modules">
-      {currentUser.role === "FACULTY" &&
+      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
         <>
           <ModulesControls
             setModuleName={setModuleName}
@@ -76,7 +76,7 @@ export default function Modules() {
                     }}
                     defaultValue={module.name} />
                 )}
-                {currentUser.role === "FACULTY" &&
+                {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
                   <ModuleControlButtons
                     moduleId={module._id}
                     deleteModule={(moduleId) => removeModule(moduleId)}
@@ -90,7 +90,7 @@ export default function Modules() {
                     <li className="wd-lesson list-group-item p-3 ps-1">
                       <BsGripVertical className="me-2 fs-3" />
                       {lesson.name}
-                      {currentUser.role === "FACULTY" &&
+                      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
                         <LessonControlButtons />
                       }
                     </li>

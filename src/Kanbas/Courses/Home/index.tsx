@@ -8,7 +8,7 @@ export default function Home() {
       <div className="flex-fill">
         <Modules />
       </div>
-      {currentUser.role === "FACULTY" &&
+      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") &&
         <div className="d-none d-md-block">
           <CourseStatus />
         </div>
