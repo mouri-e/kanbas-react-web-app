@@ -34,9 +34,9 @@ export default function AssignmentEditor() {
     
 
     const handleAssignmentChanges = async () => {
-        console.log("updating new assignment check");
+        //console.log("updating new assignment check");
         if (!cid) return;
-        console.log("got past the cid check");
+        //console.log("got past the cid check");
 
         if (assignmentID === "new") {
             const newAssignment = {

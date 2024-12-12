@@ -6,10 +6,13 @@ import * as client from "./client";
 import { Link } from "react-router-dom";
 import { BsPlusLg } from "react-icons/bs";
 import QuizQuestions from "./QuizQuestions";
+import { deleteQuizQuestion, findQuestionsForQuiz, updateQuizQuestion } from "./QuizQuestions/client";
+import * as questionReducer from "./QuizQuestions/reducer";
 
 export default function QuizEditor() {
     const { cid } = useParams();
     const { pathname } = useLocation();
+    const courseIDFromPathName = pathname.split("/")[3];
     const quizID = pathname.split("/")[5];
     // /Kanbas/Courses/${cid}/Quizzes/${quiz._id}/edit/details`
     const quizzesLink = pathname.split("/").slice(0, -3).join('/');
@@ -43,11 +46,39 @@ export default function QuizEditor() {
     const [availableDate, setAvailableDate] = useState(quiz?.availableDate);
     const [untilDate, setUntilDate] = useState(quiz?.untilDate);
 
+    const ifQuizIDIsNew = "111111111111111111111111";
+    const deleteQuizQuestionsThatHaveSpecialID = async () => { 
+        const newQuestions = await findQuestionsForQuiz(courseIDFromPathName, ifQuizIDIsNew);
+        console.log("THESE QUESTIONS SHOULD BE DELETED");
+        console.log(newQuestions);
+        newQuestions.forEach(
+            async (question: any) => {
+                if (question.quiz === ifQuizIDIsNew) {
+                    const serverQuizQuestionDeleteObject = await deleteQuizQuestion(ifQuizIDIsNew, question._id);
+                    await dispatch(questionReducer.deleteQuizQuestion(question._id));
+                }
+            }
+        );  
+    }
+
+    const updateQuizQuestionsThatHaveSpecialID = async (quizId:string) => { 
+        const newQuestions = await findQuestionsForQuiz(courseIDFromPathName, ifQuizIDIsNew);
+        console.log("THESE QUESTIONS SHOULD BE UPDATED");
+        console.log(newQuestions);
+        newQuestions.forEach(
+            async (question: any) => {
+                if (question.quiz === ifQuizIDIsNew) {
+                    const serverQuizQuestionDeleteObject = await updateQuizQuestion(ifQuizIDIsNew, { ...question, quiz:quizId});
+                    await dispatch(questionReducer.updateQuizQuestion(question));
+                }
+            }
+        );  
+    }
 
     const handleQuizChanges = async () => {
-        console.log("updating new assignment check");
+        //console.log("updating new assignment check");
         if (!cid) return;
-        console.log("got past the cid check");
+        //console.log("got past the cid check");
 
         if (quizID === "new") {
             const newQuiz = {
@@ -74,9 +105,10 @@ export default function QuizEditor() {
                 untilDate: untilDate,
             };
             const serverQuizObject = await client.createQuizForCourse(cid, newQuiz);
-            console.log("THIS IS THE NEW QUIZ ID FROM MONGO");
-            console.log(serverQuizObject);
             await dispatch(addQuiz(serverQuizObject));
+            await updateQuizQuestionsThatHaveSpecialID(serverQuizObject._id);
+
+            //update all quiz questions with quizID: 11111111...
             
             navigate(`/Kanbas/Courses/${cid}/Quizzes/${serverQuizObject._id}`);
 
@@ -381,15 +413,16 @@ export default function QuizEditor() {
                                 
                             <button
                                 onClick={handleQuizChanges}
-                                type="button" className="btn btn-danger float-end">Save</button>
+                                type="button" className="btn btn-danger float-end ms-3">Save</button>
                         
                             <button
                                 onClick={handleQuizChanges}
-                                type="button" className="btn btn-danger float-end">Save and Publish</button>
+                                type="button" className="btn btn-danger float-end ms-3">Save and Publish</button>
                                 
                     
-                            <Link to={quizzesLink}>
-                                <button type="button" className="btn btn-secondary float-end">Cancel</button>
+                            <Link to={quizzesLink}
+                                onClick={() => {deleteQuizQuestionsThatHaveSpecialID()}}>
+                                <button type="button" className="btn btn-secondary float-end ms-3">Cancel</button>
                             </Link>
                         </div>
                     </div>
@@ -412,6 +445,26 @@ export default function QuizEditor() {
                             <div className="col" ></div>
                         </div>
                         <QuizQuestions />
+                        <br />
+                        <div className="row">
+                
+                            <div className="col mb-3 float-end">
+                                
+                                <button
+                                    onClick={handleQuizChanges}
+                                    type="button" className="btn btn-danger float-end ms-3">Save</button>
+                        
+                                <button
+                                    onClick={handleQuizChanges}
+                                    type="button" className="btn btn-danger float-end ms-3">Save and Publish</button>
+                                
+                    
+                                <Link to={quizzesLink}
+                                    onClick={async () => {await deleteQuizQuestionsThatHaveSpecialID() }}>
+                                    <button type="button" className="btn btn-secondary float-end ms-3">Cancel</button>
+                                </Link>
+                            </div>
+                        </div>
                     </>
             
                 )}

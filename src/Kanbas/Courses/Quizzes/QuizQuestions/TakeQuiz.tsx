@@ -5,7 +5,7 @@ import { setQuizQuestions } from "./reducer";
 import * as client from "./client";
 
 export default function TakeQuiz() {
-    console.log("QUIZ QUESTION IS BEING RENDERED");
+    //console.log("QUIZ QUESTION IS BEING RENDERED");
     const { cid } = useParams();
     const { pathname } = useLocation();
     const quizID = pathname.split("/")[5];
@@ -37,11 +37,11 @@ export default function TakeQuiz() {
      */
 
     const fetchQuizQuestions = async () => {
-        console.log("QUIZ ID FROM QUESTIONS INDEX");
-        console.log(quizID)
+        //console.log("QUIZ ID FROM QUESTIONS INDEX");
+        //console.log(quizID)
         const quizQuestions = await client.findQuestionsForQuiz(cid as string, quizID as string);
-        console.log("THESE ARE THE QUESTION MONGO HAS");
-        console.log(quizQuestions);
+        //console.log("THESE ARE THE QUESTION MONGO HAS");
+        //console.log(quizQuestions);
         dispatch(setQuizQuestions(quizQuestions));
     };
 

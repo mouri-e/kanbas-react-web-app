@@ -15,11 +15,13 @@ export default function QuestionEditor() {
     const dispatch = useDispatch();
     
     const navigate = useNavigate();
+
+    const ifQuizIDIsNew = "111111111111111111111111";
    
   
     const { quizQuestions } = useSelector((state: any) => state.quizQuestionReducer);
-    console.log("THESE ARE THE QUIZ QUESTIONS SO FAR");
-    console.log(quizQuestions);
+    //console.log("THESE ARE THE QUIZ QUESTIONS SO FAR");
+    //console.log(quizQuestions);
     const quizQuestion = quizQuestions.find(
         (quizQuestion: any) => (
             quizQuestion.course === cid
@@ -48,27 +50,53 @@ export default function QuestionEditor() {
     
 
     const handleQuizQuestionChanges = async () => {
-        console.log("updating new assignment check");
+        //console.log("updating new assignment check");
         if (!cid) return;
-        console.log("got past the cid check");
+        //console.log("got past the cid check");
 
         if (quizQuestionId === "new") {
-            const newQuizQuestion = {
-                ...quizQuestion,
-                _id: new Date().getTime().toString(),
-                course: cid,
-                quiz: quizIdFromPath,
-                title: title,
-                question: question,
-                points: points,
-                questionType: questionType,
-                possibleAnswers: possibleAnswers,
-                correctAnswers: correctAnswers
+            //you are editing a new quiz
+            if (quizIdFromPath === "new") {
+                const newQuizQuestion = {
+                    ...quizQuestion,
+                    _id: new Date().getTime().toString(),
+                    course: cid,
+                    quiz: ifQuizIDIsNew,
+                    title: title,
+                    question: question,
+                    points: points,
+                    questionType: questionType,
+                    possibleAnswers: possibleAnswers,
+                    correctAnswers: correctAnswers
 
-            };
-            const serverQuizQuestionObject = await client.createQuestionForQuiz(cid, quizIdFromPath, newQuizQuestion);
-            dispatch(addQuizQuestion(serverQuizQuestionObject));
+                };
+                const serverQuizQuestionObject = await client.createQuestionForQuiz(cid, ifQuizIDIsNew, newQuizQuestion);
+                dispatch(addQuizQuestion(serverQuizQuestionObject));
+                navigate(`/Kanbas/Courses/${cid}/Quizzes/${quizIdFromPath}/edit/questions`);
+            }
+            //you are editing an existing quiz
+            else {
+                const newQuizQuestion = {
+                    ...quizQuestion,
+                    _id: new Date().getTime().toString(),
+                    course: cid,
+                    quiz: quizIdFromPath,
+                    title: title,
+                    question: question,
+                    points: points,
+                    questionType: questionType,
+                    possibleAnswers: possibleAnswers,
+                    correctAnswers: correctAnswers
+
+                };
+                const serverQuizQuestionObject = await client.createQuestionForQuiz(cid, quizIdFromPath, newQuizQuestion);
+                dispatch(addQuizQuestion(serverQuizQuestionObject));
+                navigate(`/Kanbas/Courses/${cid}/Quizzes/${quizIdFromPath}/edit/questions`);
+
+            }
+            
         }
+        //you are editing an existing quiz question
         else {
             
             const newQuizQuestion = {
@@ -82,11 +110,11 @@ export default function QuestionEditor() {
                 possibleAnswers: possibleAnswers,
                 correctAnswers: correctAnswers
             };
-            //UPDATE THIS TO USE THE UPDATE FUNCTION IN coursesClient
             await client.updateQuizQuestion(quizIdFromPath, newQuizQuestion);
             dispatch(updateQuizQuestion(newQuizQuestion));
+            navigate(`/Kanbas/Courses/${cid}/Quizzes/${quizIdFromPath}/edit/questions`);
         }
-        navigate(`/Kanbas/Courses/${cid}/Quizzes/${quizIdFromPath}/edit/questions`);
+        
     }
 
     const removeAllAnswers = async () => {

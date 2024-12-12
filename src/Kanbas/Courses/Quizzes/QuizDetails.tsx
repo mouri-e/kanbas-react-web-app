@@ -29,8 +29,8 @@ export default function QuizDetailsScreen() {
     };
 
     */
-    console.log("THESE ARE THE QUIZZES IN QUIZ DETAIL PAGE");
-        console.log(quizzes);
+    //console.log("THESE ARE THE QUIZZES IN QUIZ DETAIL PAGE");
+     //   console.log(quizzes);
     //edited for console
     useEffect(() => {
         

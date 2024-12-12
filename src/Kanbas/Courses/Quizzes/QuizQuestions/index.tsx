@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { setQuizQuestions } from "./reducer";
+import { setQuizQuestions, deleteQuizQuestion } from "./reducer";
 import * as client from "./client";
 
 export default function QuizQuestions() {
-    console.log("QUIZ QUESTION IS BEING RENDERED");
+    //console.log("QUIZ QUESTION IS BEING RENDERED");
     const { cid } = useParams();
     const { pathname } = useLocation();
     const quizID = pathname.split("/")[5];
@@ -26,7 +26,7 @@ export default function QuizQuestions() {
     
     const { quizQuestions } = useSelector((state: any) => state.quizQuestionReducer);
 
-    const ifQuizIDIsNew = 111111111111111111111111;
+    const ifQuizIDIsNew = "111111111111111111111111";
     /**
      * 
      * User Field: Attempts[] -> an array of quizIDs 
@@ -35,10 +35,25 @@ export default function QuizQuestions() {
      * 
      * 
      */
+    const handleQuestionDelete = async (quizId: string, questionId: string) => { 
+        console.log("Quiz ID");
+        console.log(quizId);
+        console.log("Question ID");
+        console.log(questionId);
+        const serverResponse = await client.deleteQuizQuestion(quizId, questionId);
+        dispatch(deleteQuizQuestion(questionId));
+    }
+
 
     const fetchQuizQuestions = async () => {
-        const quizQuestions = await client.findQuestionsForQuiz(cid as string, quizID as string);
-        dispatch(setQuizQuestions(quizQuestions));
+        if (quizID === "new") {
+            const quizQuestions = await client.findQuestionsForQuiz(cid as string, ifQuizIDIsNew as string);
+            dispatch(setQuizQuestions(quizQuestions));
+        }
+        else {
+            const quizQuestions = await client.findQuestionsForQuiz(cid as string, quizID as string);
+            dispatch(setQuizQuestions(quizQuestions));
+        }
     };
 
     useEffect(() => {
@@ -134,10 +149,23 @@ export default function QuizQuestions() {
                                     }
                                 </div>
                             </a>
-                
-                            
-                
+                            <br />
+                            <button className="btn btn-danger"
+                                
+                            onClick={async () => {
+                                if (quizID === "new") {
+                                    await handleQuestionDelete(ifQuizIDIsNew, quizQuestion._id);
+                                    
+                                }
+                                else {
+                                    await handleQuestionDelete(quizID, quizQuestion._id);
+                                }
+                                
+                            }}>
+                                Delete Question
+                            </button>
                         </li>
+                        
                     ))}
             </ul>
             

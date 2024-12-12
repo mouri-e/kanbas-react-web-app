@@ -11,7 +11,6 @@ import * as client from "./client";
 import Quizzes from "./Quizzes";
 import QuizEditor from "./Quizzes/QuizEditor";
 import QuizDetails from "./Quizzes/QuizDetails";
-import MultipleChoiceQuestionEditor from "./Quizzes/QuizQuestions/MultipleChoice/MultipleChoiceQuestionEditor";
 import QuizQuestions from "./Quizzes/QuizQuestions";
 import QuestionEditor from "./Quizzes/QuizQuestions/QuestionEditor";
 import TakeQuiz from "./Quizzes/QuizQuestions/TakeQuiz";
