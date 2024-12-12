@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
 import * as coursesClient from "../client";
@@ -11,7 +11,7 @@ export default function AssignmentEditor() {
     const { pathname } = useLocation();
     const assignmentID = pathname.split("/")[5];
     const assignmentsLink = pathname.split("/").slice(0, -1).join('/');
-    console.log("This is the one you're looking for:" + assignmentID);
+    //console.log("This is the one you're looking for:" + assignmentID);
     const dispatch = useDispatch();
     
     const navigate = useNavigate();
@@ -19,7 +19,11 @@ export default function AssignmentEditor() {
   
     const { assignments } = useSelector((state: any) => state.assignmentReducer);
     const assignment = assignments.find(
-        (assignment: any) => (assignment.course === cid && assignment._id === assignmentID));
+        (assignment: any) => (
+            assignment.course === cid && assignment._id === assignmentID 
+            )
+    );
+    
     
     const [assignmentTitle, setAssignmentTitle] = useState(assignment?.title);
     const [assignmentDescription, setAssignmentDescription] = useState(assignment?.description);
@@ -61,7 +65,6 @@ export default function AssignmentEditor() {
                 due: assignmentDue,
                 available: assignmentAvailable,
                 closedOn: assignmentClosedOn
-
             };
             //UPDATE THIS TO USE THE UPDATE FUNCTION IN coursesClient
             await assignmentsClient.updateAssignment(newAssignment);
@@ -69,6 +72,8 @@ export default function AssignmentEditor() {
         }
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     }
+
+    
 
 
     return (

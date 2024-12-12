@@ -8,6 +8,13 @@ import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
 import { useEffect, useState } from "react";
 import * as client from "./client";
+import Quizzes from "./Quizzes";
+import QuizEditor from "./Quizzes/QuizEditor";
+import QuizDetails from "./Quizzes/QuizDetails";
+import MultipleChoiceQuestionEditor from "./Quizzes/QuizQuestions/MultipleChoice/MultipleChoiceQuestionEditor";
+import QuizQuestions from "./Quizzes/QuizQuestions";
+import QuestionEditor from "./Quizzes/QuizQuestions/QuestionEditor";
+import TakeQuiz from "./Quizzes/QuizQuestions/TakeQuiz";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
@@ -51,8 +58,14 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="Assignments" element={<Assignments />} />
             <Route path="Assignments/:aid" element={<AssignmentEditor />} />
             <Route path="People" element={<PeopleTable users={users} />} />
-            <Route path="Quizzes" element={<PeopleTable users={users} />} />
-            <Route path="Quizzes/:qid" element={<PeopleTable users={users}/>} />
+            <Route path="Quizzes" element={<Quizzes />} />
+            <Route path="Quizzes/:qid" element={<QuizDetails />} />
+
+            {/** #/Kanbas/Courses/${cid}/Quizzes/${quiz._id}/edit/questions/${quizQuestion._id} */}
+            <Route path="Quizzes/:qid/edit/questions/:questionID" element={<QuestionEditor />} />
+            <Route path="Quizzes/:qid/edit/questions" element={<QuizEditor />} />
+            <Route path="Quizzes/:qid/edit/*" element={<QuizEditor />} />
+            <Route path="Quizzes/:qid/take" element={<TakeQuiz />} />
           </Routes>
         </div>
       </div>

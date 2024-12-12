@@ -10,7 +10,6 @@ import * as coursesClient from "../Courses/client";
 export default function Dashboard(
     { courses, course, previewing, setPreviewMode, setCourse, addNewCourse,
         deleteCourse, updateCourse, enrolling, setEnrolling, updateEnrollment }:
-        
         {
             courses: any[];
             course: any;
@@ -162,8 +161,8 @@ export default function Dashboard(
                     <hr />
                 </>
             }
-
-            {currentUser.role === "STUDENT" &&
+            
+            {/*currentUser.role === "STUDENT" &&
                 <button
                     onClick={() => {
                         const oppPreviewing = !previewing;
@@ -173,7 +172,7 @@ export default function Dashboard(
                     Enrollments
                 </button>
 
-            }
+            */}
             <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
             <hr />
             <div id="wd-dashboard-courses" className="row">

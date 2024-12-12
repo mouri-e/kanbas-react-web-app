@@ -23,10 +23,10 @@ export default function Assignments() {
     const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
     dispatch(setAssignments(assignments));
   };
-
+  //edited for console
   useEffect(() => {
     fetchAssignments();
-  });
+  }, []);
 
   return (
     <div id="wd-assignments">

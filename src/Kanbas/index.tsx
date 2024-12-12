@@ -54,6 +54,7 @@ export default function Kanbas() {
     const fetchCourses = async () => {
         try {
             const allCourses = await courseClient.fetchAllCourses();
+            
             const enrolledCourses = await userClient.findCoursesForUser(
                 currentUser._id
             );
@@ -112,17 +113,6 @@ export default function Kanbas() {
         );
     };
 
-    
-/*
-    useEffect(() => {
-        if (previewing) {
-            findAllCoursesInKanbas();
-        } else {
-            fetchCourses();
-        }
-        
-    }, [currentUser, previewing]);
-    */
 
     useEffect(() => {
         if (enrolling) {
